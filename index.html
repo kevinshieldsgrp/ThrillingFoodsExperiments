@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thrilling Bakon™ — Competitive Intelligence v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0c0a;--s1:#181613;--s2:#201e1a;--bdr:#2a2721;--bdr2:#332f28;--tx:#ede8df;--mu:#867f74;--sm:#a8a097;--ac:#e34a2c;--gr:#3ecf8e;--ye:#f5c53a;--rd:#e34a2c;--or:#f07b3a;--bl:#5b9cf6}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;font-size:14px}
+.hdr{background:linear-gradient(160deg,#1c0d07,#261408 60%,#1c0d07);border-bottom:2px solid var(--ac);padding:22px 40px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.hdr h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(24px,4vw,46px);letter-spacing:2px;line-height:1}
+.hdr h1 em{color:var(--ac);font-style:normal}
+.hdr-meta{font-family:'DM Mono',monospace;font-size:11px;color:var(--mu);margin-top:5px;letter-spacing:1px;text-transform:uppercase}
+.leg{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.leg-i{display:flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:1px}
+.leg-d{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.pipe-bar{background:var(--s1);border-bottom:1px solid var(--bdr);padding:8px 40px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--ye);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.pipe-bar span{font-family:'DM Mono',monospace;font-size:11px;color:var(--mu)}
+.pipe-bar strong{color:var(--tx)}
+.pipe-btn{margin-left:auto;background:transparent;border:1px solid var(--bdr);color:var(--mu);padding:4px 12px;border-radius:4px;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .2s}
+.pipe-btn:hover{border-color:var(--ac);color:var(--ac)}
+.time-ctrl{padding:10px 40px;background:var(--s2);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tc-lbl{font-family:'DM Mono',monospace;font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:1px}
+.seg{display:flex;border:1px solid var(--bdr);border-radius:5px;overflow:hidden}
+.seg-btn{font-family:'DM Mono',monospace;font-size:11px;padding:5px 13px;background:transparent;border:none;color:var(--mu);cursor:pointer;text-transform:uppercase;letter-spacing:1px;transition:all .15s;white-space:nowrap}
+.seg-btn.active{background:var(--ac);color:#fff}
+.seg-btn:not(.active):hover{background:var(--bdr);color:var(--tx)}
+.wnav{display:flex;align-items:center;gap:7px}
+.nbtn{background:transparent;border:1px solid var(--bdr);color:var(--mu);width:24px;height:24px;border-radius:4px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.nbtn:hover{border-color:var(--ac);color:var(--ac)}
+#plbl{font-family:'DM Mono',monospace;font-size:12px;color:var(--tx);min-width:155px;text-align:center}
+.snap-note{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);margin-left:auto}
+.tnav{padding:0 40px;background:var(--s1);border-bottom:1px solid var(--bdr);display:flex;overflow-x:auto}
+.ttab{font-family:'DM Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--mu);padding:12px 18px;cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s}
+.ttab:hover{color:var(--tx)}
+.ttab.active{color:var(--ac);border-bottom-color:var(--ac)}
+.panel{display:none;padding:26px 40px 40px}
+.panel.active{display:block}
+.sec{font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--mu);margin-bottom:13px;padding-bottom:7px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px}
+.badge{font-family:'DM Mono',monospace;font-size:9px;padding:2px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:1px}
+.badge.w{background:rgba(91,156,246,.12);color:var(--bl);border:1px solid rgba(91,156,246,.22)}
+.badge.m{background:rgba(245,197,58,.1);color:var(--ye);border:1px solid rgba(245,197,58,.22)}
+.badge.s{background:rgba(134,127,116,.1);color:var(--mu);border:1px solid rgba(134,127,116,.2)}
+.tw{overflow-x:auto;border:1px solid var(--bdr);border-radius:8px;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:780px}
+thead tr{background:var(--s1);border-bottom:2px solid var(--bdr2)}
+thead th{padding:10px 12px;text-align:left;font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--mu);white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--bdr);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--s1)}
+tbody tr.hl{background:linear-gradient(90deg,rgba(227,74,44,.07),transparent)}
+tbody tr.hl:hover{background:linear-gradient(90deg,rgba(227,74,44,.11),transparent)}
+td{padding:10px 12px;vertical-align:middle}
+.pn{display:flex;flex-direction:column;gap:2px}
+.pn .n{font-weight:700;font-size:13px;white-space:nowrap}
+.pn .sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.7px}
+.pn .sub.f{color:var(--ac)}
+.pill{display:inline-flex;align-items:center;justify-content:center;padding:2px 8px;border-radius:20px;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;min-width:46px;white-space:nowrap}
+.g{background:rgba(62,207,142,.1);color:var(--gr);border:1px solid rgba(62,207,142,.2)}
+.y{background:rgba(245,197,58,.1);color:var(--ye);border:1px solid rgba(245,197,58,.2)}
+.r{background:rgba(227,74,44,.1);color:var(--rd);border:1px solid rgba(227,74,44,.2)}
+.b{background:rgba(91,156,246,.1);color:var(--bl);border:1px solid rgba(91,156,246,.2)}
+.br{display:flex;align-items:center;gap:7px;min-width:88px}
+.bt{flex:1;height:4px;background:var(--bdr);border-radius:2px;overflow:hidden}
+.bf{height:100%;border-radius:2px}
+.chips{display:flex;flex-wrap:wrap;gap:3px}
+.chip{font-family:'DM Mono',monospace;font-size:10px;padding:2px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:.4px}
+.chip.on{background:rgba(62,207,142,.1);color:var(--gr)}
+.chip.off{background:rgba(42,39,33,.6);color:var(--mu)}
+.chip.pa{background:rgba(245,197,58,.1);color:var(--ye)}
+.spk{display:flex;align-items:center;gap:7px}
+.sv{font-family:'DM Mono',monospace;font-size:12px;min-width:50px}
+.delta{font-family:'DM Mono',monospace;font-size:10px;padding:1px 4px;border-radius:3px}
+.delta.up{background:rgba(62,207,142,.1);color:var(--gr)}
+.delta.dn{background:rgba(227,74,44,.1);color:var(--rd)}
+.delta.fl{background:rgba(134,127,116,.1);color:var(--mu)}
+.hbc{display:flex;flex-direction:column;gap:7px;margin-bottom:28px}
+.hbr{display:flex;align-items:center;gap:9px}
+.hbl{font-family:'DM Mono',monospace;font-size:11px;min-width:168px;color:var(--sm);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.hbr.foc .hbl{color:var(--ac);font-weight:600}
+.hbt{flex:1;height:20px;background:var(--s1);border-radius:3px;overflow:hidden}
+.hbf{height:100%;display:flex;align-items:center;padding-left:8px;font-family:'DM Mono',monospace;font-size:11px;white-space:nowrap;border-radius:3px;transition:width .75s cubic-bezier(.25,.8,.25,1)}
+.hbf.g{background:rgba(62,207,142,.16);color:var(--gr)}
+.hbf.y{background:rgba(245,197,58,.16);color:var(--ye)}
+.hbf.r{background:rgba(227,74,44,.16);color:var(--rd)}
+.hbf.foc{background:rgba(227,74,44,.11);color:var(--ac);border:1px solid rgba(227,74,44,.26)}
+.scg{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px;margin-bottom:22px}
+.sc{background:var(--s1);border:1px solid var(--bdr);border-radius:8px;padding:14px 13px;display:flex;flex-direction:column;gap:4px}
+.sc.hl{border-color:rgba(227,74,44,.28)}
+.sc .lbl{font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:1.3px;color:var(--mu)}
+.sc .val{font-family:'Bebas Neue',sans-serif;font-size:30px;line-height:1.05}
+.sc .unit{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu)}
+.sc .tr{font-family:'DM Mono',monospace;font-size:10px;margin-top:2px}
+.icg{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:12px;margin-top:18px}
+.ic{background:var(--s1);border:1px solid var(--bdr);border-radius:8px;padding:14px 16px}
+.ich{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.ici{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.ic h4{font-size:13px;font-weight:600}
+.ic p{font-size:12px;color:var(--sm);line-height:1.6}
+.note{margin-top:16px;padding:10px 14px;background:var(--s1);border:1px solid var(--bdr);border-left:3px solid var(--ye);border-radius:6px;font-family:'DM Mono',monospace;font-size:11px;color:var(--mu);line-height:1.6}
+.note strong{color:var(--ye)}
+.note.rn{border-left-color:var(--rd)}.note.rn strong{color:var(--rd)}
+.note.gn{border-left-color:var(--gr)}.note.gn strong{color:var(--gr)}
+.tl-chart{background:var(--s1);border:1px solid var(--bdr);border-radius:8px;padding:16px 18px;margin-bottom:18px}
+.tl-chart h4{font-family:'DM Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--mu);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+canvas.tl{width:100%;height:140px;display:block}
+
+/* SOURCE TREE */
+.src-tree{margin-top:22px;border:1px solid var(--bdr);border-radius:7px;overflow:hidden}
+.src-toggle{width:100%;background:var(--s1);border:none;color:var(--mu);padding:10px 16px;display:flex;align-items:center;gap:8px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1.2px;text-align:left;transition:color .2s}
+.src-toggle:hover{color:var(--tx)}
+.src-toggle .arr{font-size:10px;transition:transform .25s;flex-shrink:0}
+.src-toggle.open .arr{transform:rotate(90deg)}
+.src-toggle .src-meta{margin-left:auto;font-size:10px;opacity:.6}
+.src-body{display:none;padding:0 16px 16px;background:var(--s2)}
+.src-body.open{display:block}
+.src-section{margin-top:14px}
+.src-section-hd{font-family:'DM Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--mu);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.src-section-hd::before{content:'';display:inline-block;width:3px;height:3px;border-radius:50%;background:var(--ac)}
+.src-row{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid rgba(42,39,33,.5);font-size:11px;line-height:1.5}
+.src-row:last-child{border-bottom:none}
+.src-row .src-icon{font-size:11px;flex-shrink:0;margin-top:1px}
+.src-row .src-info{display:flex;flex-direction:column;gap:2px;flex:1}
+.src-row .src-name{color:var(--sm);font-weight:500}
+.src-row .src-url{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu)}
+.src-row .src-url a{color:var(--bl);text-decoration:none}
+.src-row .src-url a:hover{text-decoration:underline}
+.src-row .src-note{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);font-style:italic}
+.src-row .src-cadence{font-family:'DM Mono',monospace;font-size:9px;padding:1px 5px;border-radius:3px;flex-shrink:0;margin-top:2px}
+.src-row .src-cadence.w{background:rgba(91,156,246,.1);color:var(--bl)}
+.src-row .src-cadence.m{background:rgba(245,197,58,.08);color:var(--ye)}
+.src-row .src-cadence.s{background:rgba(134,127,116,.1);color:var(--mu)}
+.src-assumption{padding:8px 10px;background:rgba(13,12,10,.4);border-radius:5px;border-left:2px solid var(--bdr2);font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);line-height:1.6;margin-top:6px}
+.src-assumption strong{color:var(--ye)}
+
+/* CHANNEL GRID for sentiment */
+.ch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.ch-card{background:var(--s1);border:1px solid var(--bdr);border-radius:7px;padding:14px}
+.ch-card .ch-hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.ch-card .ch-icon{font-size:15px}
+.ch-card .ch-name{font-weight:600;font-size:12px}
+.ch-card .ch-badge{margin-left:auto}
+.ch-card .ch-metric{font-family:'DM Mono',monospace;font-size:19px;font-weight:500;line-height:1.1}
+.ch-card .ch-sub{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);margin-top:3px}
+.ch-card .ch-delta{font-family:'DM Mono',monospace;font-size:10px;margin-top:6px}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--bdr2);border-radius:10px;padding:26px 30px;max-width:560px;width:90%;max-height:80vh;overflow-y:auto}
+.modal h3{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:14px;color:var(--ac)}
+.modal pre{background:var(--bg);border:1px solid var(--bdr);border-radius:6px;padding:12px;font-family:'DM Mono',monospace;font-size:10px;color:var(--sm);line-height:1.7;overflow-x:auto;margin-bottom:12px;white-space:pre-wrap}
+.modal p{font-size:12px;color:var(--sm);line-height:1.7;margin-bottom:9px}
+.modal h4{font-family:'DM Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--mu);margin:14px 0 6px}
+.modal-close{background:var(--bdr);border:none;color:var(--tx);padding:6px 16px;border-radius:5px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-top:8px}
+.modal-close:hover{background:var(--bdr2)}
+@media(max-width:768px){.hdr,.pipe-bar,.time-ctrl,.tnav,.panel{padding-left:16px;padding-right:16px}.hdr{flex-direction:column;align-items:flex-start}.scg{grid-template-columns:repeat(2,1fr)}.hbl{min-width:95px}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <h1>Thrilling <em>Bakon™</em> Intelligence</h1>
+    <div class="hdr-meta">9 Competitors · 7 Themes · Weekly Refresh Architecture · v3 April 2026</div>
+  </div>
+  <div class="leg">
+    <div class="leg-i"><div class="leg-d" style="background:var(--gr)"></div>Advantage</div>
+    <div class="leg-i"><div class="leg-d" style="background:var(--ye)"></div>Watch</div>
+    <div class="leg-i"><div class="leg-d" style="background:var(--rd)"></div>Disadvantage</div>
+    <div class="leg-i"><div class="leg-d" style="background:var(--bl)"></div>Weekly metric</div>
+  </div>
+</div>
+
+<div class="pipe-bar">
+  <div class="pulse"></div>
+  <span>Data layer: <strong id="cwl">Week of Apr 14, 2026</strong> · <strong id="scnt">1 snapshot</strong> loaded · Pipeline: weekly auto-refresh</span>
+  <button class="pipe-btn" onclick="document.querySelector('.modal-bg').classList.add('open')">⟳ Pipeline Config</button>
+</div>
+
+<div class="time-ctrl">
+  <span class="tc-lbl">View by</span>
+  <div class="seg">
+    <button class="seg-btn active" onclick="setG('week',this)">Week</button>
+    <button class="seg-btn" onclick="setG('month',this)">Month</button>
+    <button class="seg-btn" onclick="setG('year',this)">Year</button>
+  </div>
+  <div class="wnav">
+    <button class="nbtn" onclick="nav(-1)">‹</button>
+    <span id="plbl">Apr 14 – Apr 20, 2026</span>
+    <button class="nbtn" onclick="nav(1)">›</button>
+  </div>
+  <span class="snap-note" id="snote">Showing 1 of 1 snapshots · add weekly via pipeline</span>
+</div>
+
+<div class="tnav">
+  <button class="ttab active" onclick="showTab('ing')">🧪 Ingredients</button>
+  <button class="ttab" onclick="showTab('med')">📣 Media Index</button>
+  <button class="ttab" onclick="showTab('cpg')">🏪 Distribution</button>
+  <button class="ttab" onclick="showTab('pri')">💰 Pricing</button>
+  <button class="ttab" onclick="showTab('vel')">🛒 Retail Velocity</button>
+  <button class="ttab" onclick="showTab('sen')">⭐ Sentiment</button>
+  <button class="ttab" onclick="showTab('ins')">⚡ Insights</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   DATA LAYER — edit snapshots array to add weekly data
+   ═══════════════════════════════════════════════════ */
+const COMPS = ["Thrilling Bakon™","Lightlife","MorningStar Farms","Sweet Earth","Tofurky","Upton's Naturals","Yves Veggie","Turkey Bacon (Butterball)"];
+
+const STATIC = {
+  calories:    [90,  20,  30,  45,  27,  40,  25,  30],
+  protein:     [6,   5,   3,   10,  13,  15,  3,   2 ],
+  satFat:      [1.5, 0,   0.5, 1,   0.75,0,   0,   0.5],
+  sodium:      [170, 140, 220, 120, 370, 400, 350, 167],
+  ingr:        [8,   15,  20,  16,  10,  8,   14,  12 ],
+  vegan:       [1,   1,   0,   1,   1,   1,   1,   0  ],
+  gf:          [1,   0,   0,   0,   0,   0,   0,   1  ],
+  nongmo:      [1,   0,   0,   1,   1,   1,   1,   0  ],
+  artif:       [0,   1,   1,   0,   0,   0,   1,   1  ],
+  estDoors:    [200, 12000,20000,8000,5000,3000,500,50000],
+  channels:    ["DTC + Early Retail","Mass Retail","Mass Retail·Frozen","Natural + Mass","Natural/Specialty","Natural/Specialty","Natural·Canada","Mass Retail"],
+  retailers:   [["Own site","Select specialty"],["Kroger","Target","Publix","WFM","Safeway"],["Walmart","Target","Amazon","Kroger","Costco"],["WFM","Target","Sprouts"],["WFM","Sprouts","Nat. Grocers"],["WFM","Sprouts","Fred Meyer"],["Stater Bros","Select WFM"],["All major grocers"]],
+  regions:     [["Ltd","Min","Min","Min"],["Str","Str","Str","Str"],["Str","Str","Str","Str"],["Str","Mod","Mod","Mod"],["Str","Mod","Mod","Str"],["Mod","Str","Mod","Mod"],["Mod","Ltd","Ltd","Sel"],["All","All","All","All"]],
+  foodsvc:     [1,1,1,0,0,1,0,1],
+  pkgSize:     ["8 oz DTC","5 oz","5.25 oz","5.5 oz","6 oz","5 oz","5.5 oz","12 oz"],
+  listPrice:   ["$15+$15 ship","~$5.00","~$4.79","~$5.99","~$5.00","~$5.49","~$4.50","~$4.50"],
+  promo:       [0,0,1,0,1,0,0,1],
+  shelf:       ["DTC direct","Produce aisle","Frozen aisle","Produce aisle","Produce aisle","Produce aisle","Natural section","Meat/deli"],
+  igHandle:    ["@thrillingfoods","@lightlifefoods","@morningstarfarms","@sweetearthfoods","@the_tofurky_company","@uptonsnaturals","est.","est."],
+  pressRank:   ["#1 Tasting Table '25","#3–4 rankings","#3 Chowhound '25","Strong SEO only","Mid-tier","Cult niche","Limited US","TV/Mass media"],
+  socialSignal:["Growing·Niche","Large·Low Engmt","Moderate mass","DORMANT ⚠","Largest plant IG","Engaged niche","Weak US","Mass reach"]
+};
+
+// ── SNAPSHOTS — append weekly ──────────────────────
+// To add Week 2: copy the object below, update date/label, fill all arrays
+const SNAPS = [
+  {
+    date:"2026-04-14", label:"Apr 14, 2026",
+    igFollowers: [13000,73000,53000,97000,104000,45000,8000,35000],
+    pricePerOz:  [1.88, 1.00, 0.91, 1.09, 0.83,  1.10, 0.82,0.38],
+    reviewScore: [4.4,  3.5,  3.8,  3.9,  3.6,   4.2,  3.4, 3.7 ],
+    reviewCount: [120,  890,  1450, 630,  980,   340,  85,  2100],
+    inStockPct:  [100,  97,   95,   88,   92,    82,   65,  99  ],
+    newPress:    [1,    0,    0,    0,    0,     0,    0,   0   ],
+    retailDoors: [200,  12000,20000,8000, 5000,  3000, 500, 50000],
+    // Sentiment channels — Thrilling only tracked in detail; add others as available
+    sentiment: {
+      amazon:     {score:4.4, count:120,  mentions:14,  trend:"stable"},
+      retailer:   {score:4.5, count:38,   mentions:8,   trend:"up"},
+      reddit:     {score:null,count:null, mentions:22,  trend:"up"},
+      tiktok:     {score:null,count:null, mentions:47,  trend:"up"},
+      discord:    {score:null,count:null, mentions:11,  trend:"stable"},
+      youtube:    {score:null,count:null, mentions:6,   trend:"stable"},
+      pinterest:  {score:null,count:null, mentions:19,  trend:"up"},
+      facebook:   {score:null,count:null, mentions:31,  trend:"stable"},
+      google:     {score:4.2, count:14,   mentions:14,  trend:"stable"}
+    }
+  }
+  /* WEEK 2 TEMPLATE:
+  ,{
+    date:"2026-04-21", label:"Apr 21, 2026",
+    igFollowers: [?,?,?,?,?,?,?,?],
+    pricePerOz:  [?,?,?,?,?,?,?,?],
+    reviewScore: [?,?,?,?,?,?,?,?],
+    reviewCount: [?,?,?,?,?,?,?,?],
+    inStockPct:  [?,?,?,?,?,?,?,?],
+    newPress:    [?,?,?,?,?,?,?,?],
+    retailDoors: [?,?,?,?,?,?,?,?],
+    sentiment: {
+      amazon:    {score:?,count:?,mentions:?,trend:"up|dn|stable"},
+      retailer:  {score:?,count:?,mentions:?,trend:"up|dn|stable"},
+      reddit:    {score:null,count:null,mentions:?,trend:"up|dn|stable"},
+      tiktok:    {score:null,count:null,mentions:?,trend:"up|dn|stable"},
+      discord:   {score:null,count:null,mentions:?,trend:"up|dn|stable"},
+      youtube:   {score:null,count:null,mentions:?,trend:"up|dn|stable"},
+      pinterest: {score:null,count:null,mentions:?,trend:"up|dn|stable"},
+      facebook:  {score:null,count:null,mentions:?,trend:"up|dn|stable"},
+      google:    {score:?,count:?,mentions:?,trend:"up|dn|stable"}
+    }
+  }*/
+];
+
+/* ═══════════════════════════════
+   SOURCE DEFINITIONS — one per theme
+   Edit assumptions/urls as data sources evolve
+   ═══════════════════════════════ */
+const SOURCES = {
+  ing: {
+    sections:[
+      {title:"Nutrition label data",rows:[
+        {icon:"🏷️",name:"Thrilling Bakon™ physical label",url:"https://www.thrillingfoods.com/pages/nutrition",cadence:"s",note:"Label scan confirmed Apr 2026. Sodium 170mg, Calories 90, Protein 6g, Sat Fat 1.5g verified."},
+        {icon:"🔗",name:"Lightlife Smart Bacon nutrition",url:"https://exploringvegan.com/lightlife-smart-bacon-review/",cadence:"m",note:"Per-serving data from label photos. Sodium 140mg confirmed."},
+        {icon:"🔗",name:"MorningStar Farms Smart Label",url:"https://smartlabel.kelloggs.com/Product/Index/00028989971951",cadence:"m",note:"Official SmartLabel source. Note: product contains egg whites — not fully vegan."},
+        {icon:"🔗",name:"Sweet Earth nutrition",url:"https://www.abillion.com/products/benevolent-bacon-hickory-and-sage-smoked-seitan-bacon-10000544",cadence:"m",note:"Per-serving: 10g protein, 120mg sodium. 5.5oz = 8 slices."},
+        {icon:"🔗",name:"Upton's Naturals official site",url:"https://uptonsnaturals.com/products/bacon-seitan/",cadence:"m",note:"Serving size is 2oz (57g) — per-slice standardization needed vs. other brands."},
+        {icon:"🔗",name:"Yves Veggie official CA site",url:"https://yvesveggie.ca/en/products/breakfast/veggie-bacon-strips/",cadence:"m",note:"Canadian label. US distribution limited; values may vary by market."}
+      ]},
+      {title:"Assumptions",rows:[
+        {icon:"⚠️",name:"Serving size standardization",url:null,cadence:"s",note:"Thrilling serving = 11g cooked (1 thick slice). Upton's serving = 57g (2oz) — figures divided by estimated slices per serving for comparison. Verify before publishing."},
+        {icon:"⚠️",name:"Ingredient count methodology",url:null,cadence:"s",note:"Count includes all sub-ingredients listed in parentheses. Some brands list compound ingredients (e.g. 'soy sauce (water, soybeans, wheat, salt)') which inflates count vs brands that list only top-level items."}
+      ]}
+    ]
+  },
+  med: {
+    sections:[
+      {title:"Instagram — verified public profiles",rows:[
+        {icon:"📷",name:"Thrilling Foods IG",url:"https://www.instagram.com/thrillingfoods/",cadence:"w",note:"13K followers, 1,022 posts. Verified Apr 16 2026."},
+        {icon:"📷",name:"Lightlife IG",url:"https://www.instagram.com/lightlifefoods/",cadence:"w",note:"73K followers, 1,148 posts. Engagement rate ~0.15% (low per SPEAKRJ analysis)."},
+        {icon:"📷",name:"MorningStar Farms IG",url:"https://www.instagram.com/morningstarfarms/",cadence:"w",note:"53K followers, 984 posts."},
+        {icon:"📷",name:"Sweet Earth IG",url:"https://www.instagram.com/sweetearthfoods/",cadence:"w",note:"97K followers — CONFIRMED DORMANT, 0 posts as of Apr 2026. Nestlé brand, social presence abandoned."},
+        {icon:"📷",name:"Tofurky IG",url:"https://www.instagram.com/the_tofurky_company/",cadence:"w",note:"104K followers, 1,921 posts. Largest plant-based bacon IG presence."},
+        {icon:"📷",name:"Upton's Naturals IG",url:"https://www.instagram.com/uptonsnaturals/",cadence:"w",note:"45K followers, 2,532 posts. High relative engagement."}
+      ]},
+      {title:"Press rankings",rows:[
+        {icon:"📰",name:"Tasting Table Aug 2025 ranking",url:"https://www.tastingtable.com/1936522/plant-based-bacon-ranked/",cadence:"m",note:"Thrilling ranked #1. Reviewed Aug 16 2025. Salt-cured, hickory smoked — only brand to produce drippings."},
+        {icon:"📰",name:"Chowhound Dec 2025 ranking",url:"https://www.chowhound.com/2060822/plant-based-bacon-brands-ranking/",cadence:"m",note:"Thrilling ranked high. Published Dec 27 2025."},
+        {icon:"📰",name:"abillion community reviews",url:"https://www.abillion.com/products/thrilling-foods-bakon-strips-10170183",cadence:"w",note:"4.4/5 average from 14 reviews as of Apr 2026."}
+      ]},
+      {title:"Assumptions",rows:[
+        {icon:"⚠️",name:"Review score methodology",url:null,cadence:"s",note:"Scores are editorially-derived aggregates, not a standardized platform rating. Amazon, abillion, and retailer scores are mixed into a single estimate. Treat as directional, not precise."},
+        {icon:"⚠️",name:"Yves and Butterball social",url:null,cadence:"m",note:"Yves US IG not confirmed — ~8K is estimated from Canadian and limited US search results. Butterball ~35K is estimated; their main account appears to be the corporate parent brand."}
+      ]}
+    ]
+  },
+  cpg: {
+    sections:[
+      {title:"Retail distribution data",rows:[
+        {icon:"🏪",name:"Lightlife 12,000+ store announcement",url:"https://www.mapleleaffoods.com/news/lightlife-announces-availability-of-plant-based-meat/",cadence:"m",note:"Maple Leaf Foods press release 2019. Includes Kroger, Target, Publix. Most recent verified figure; actual 2026 count may differ."},
+        {icon:"🏪",name:"Thrilling LinkedIn bio",url:"https://www.linkedin.com/company/thrilling-foods",cadence:"m",note:"'200+ retail and foodservice outlets nationwide.' Undated. Verify with a store list — this is the most important data point to confirm."},
+        {icon:"🏪",name:"MorningStar store count",url:"https://www.walmart.com/ip/MorningStar-Farms/10891734",cadence:"m",note:"Estimated 20,000+ based on presence in Walmart (4,700 stores), Target (2,000), Amazon, and regional chains. No single press release confirms exact figure."},
+        {icon:"🏪",name:"Whole Foods store count",url:"https://www.wholefoodsmagazine.com/articles/17438-retail-insights-2025-retail-universe",cadence:"m",note:"522 US stores as of 2024. Sprouts: 431 stores. Natural Grocers: 169 stores. Combined = ~1,100 premium natural stores — Thrilling's primary retail target."}
+      ]},
+      {title:"Assumptions",rows:[
+        {icon:"⚠️",name:"Store count methodology",url:null,cadence:"s",note:"All counts except Lightlife (press release) are estimates from retailer search pages and regional availability data. For precision, SPINS or Nielsen distribution data is required. Figures should be treated as order-of-magnitude estimates."},
+        {icon:"⚠️",name:"Regional chip rating",url:null,cadence:"s",note:"Strong = confirmed in >5 major retailers in region. Moderate = 2-4 retailers or limited geography. Limited = 1 retailer or specialty only. Estimated from retailer locator searches."}
+      ]}
+    ]
+  },
+  pri: {
+    sections:[
+      {title:"Pricing sources",rows:[
+        {icon:"💲",name:"Thrilling Bakon DTC pricing",url:"https://www.thrillingfoods.com/pages/buy-thrilling-bakon",cadence:"w",note:"$15/pack (8oz) + $15 shipping = $1.88/oz effective. Free shipping on 2+ packs ($22.50/pack = $1.41/oz). Shipping cost significantly impacts per-oz calc."},
+        {icon:"💲",name:"Lightlife Amazon/retail price",url:"https://exploringvegan.com/lightlife-smart-bacon-review/",cadence:"w",note:"~$5.00 for 5oz = $1.00/oz. Price varies by retailer; Target and Kroger typically $4.79–5.49."},
+        {icon:"💲",name:"MorningStar retail price",url:"https://www.walmart.com/ip/MorningStar-Farms-Meatless-Bacon-Strips/10891734",cadence:"w",note:"~$4.79 at Walmart for 5.25oz = $0.91/oz. Frequently on promo."},
+        {icon:"💲",name:"Sweet Earth retail",url:"https://www.abillion.com/products/benevolent-bacon-hickory-and-sage-smoked-seitan-bacon-10000544",cadence:"w",note:"$5.99 for 5.5oz = $1.09/oz per abillion listing."},
+        {icon:"💲",name:"Upton's Naturals retail",url:"https://www.instacart.com/products/47640-upton-s-naturals-seitan-bacon-in-strips-5-oz",cadence:"w",note:"~$5.49 for 5oz = $1.10/oz via Instacart listings."},
+        {icon:"💲",name:"Butterball turkey bacon",url:"https://www.heb.com/product-detail/butterball-original-turkey-bacon/1295578",cadence:"w",note:"~$4.50 for 12oz = $0.38/oz. Price anchors category benchmark expectations."}
+      ]},
+      {title:"Assumptions",rows:[
+        {icon:"⚠️",name:"$/g protein calculation",url:null,cadence:"s",note:"Price/oz divided by protein grams per oz. Protein per oz derived from label serving size and package weight. Thrilling $0.31/g protein is the weakest value metric in the category."},
+        {icon:"⚠️",name:"Thrilling effective DTC price",url:null,cadence:"s",note:"$1.88/oz is worst-case (1 pack with shipping). If buying 2 packs with free shipping: $45/24oz = $1.88/oz same. Buying 3 packs: $135/36oz = $3.75/pack = $0.47/oz closer to retail. Bulk buying changes picture significantly."}
+      ]}
+    ]
+  },
+  vel: {
+    sections:[
+      {title:"In-stock signal sources",rows:[
+        {icon:"🛒",name:"Instacart availability scrape",url:"https://www.instacart.com",cadence:"w",note:"Public product pages show in-stock status per zip code. Proxy for retail availability. 100% for Thrilling reflects DTC fulfillment, not shelf presence."},
+        {icon:"🛒",name:"Google Shopping availability",url:"https://shopping.google.com",cadence:"w",note:"'Available nearby' signal used as secondary in-stock indicator for retail brands."},
+        {icon:"🛒",name:"Brand store locator pages",url:null,cadence:"m",note:"Lightlife, MorningStar, and Sweet Earth all have store locators. Cross-reference for regional availability changes."}
+      ]},
+      {title:"Assumptions",rows:[
+        {icon:"⚠️",name:"In-stock % methodology",url:null,cadence:"s",note:"Currently estimated based on brand scale, DTC model (Thrilling = 100% own inventory), and known retailer presence. True in-stock % requires retailer API access or SPINS shelf data. Current figures are proxies."},
+        {icon:"⚠️",name:"Promo detection",url:null,cadence:"w",note:"Promotional flags based on manual checks of Google Shopping, retailer circulars, and brand email lists. Automated detection can be built via Google Shopping price comparison API."}
+      ]}
+    ]
+  },
+  sen: {
+    sections:[
+      {title:"Review platforms",rows:[
+        {icon:"⭐",name:"Amazon product reviews",url:"https://www.amazon.com",cadence:"w",note:"Star rating and review count scraped from ASIN pages. Thrilling not currently sold on Amazon — DTC only. Lightlife and MorningStar have 500–2,000+ Amazon reviews."},
+        {icon:"⭐",name:"abillion community reviews",url:"https://www.abillion.com",cadence:"w",note:"Vegan-specific review platform. Thrilling: 4.4/5 from 14 reviews. Upton's: 4.2/5. Strong signal for core vegan consumer."},
+        {icon:"⭐",name:"Instacart / retailer reviews",url:"https://www.instacart.com",cadence:"w",note:"Retailer-hosted review scores for grocery products. Good signal for mainstream consumer sentiment vs. vegan community platforms."},
+        {icon:"⭐",name:"Google Maps / Places",url:"https://maps.google.com",cadence:"m",note:"Relevant for foodservice locations stocking Thrilling. Search 'Thrilling Bakon restaurant' to find placement mentions."}
+      ]},
+      {title:"Social listening channels",rows:[
+        {icon:"🤖",name:"Reddit — r/vegan, r/PlantBasedDiet, r/veganfitness",url:"https://www.reddit.com/r/vegan",cadence:"w",note:"High-intent discussion. Search 'thrilling bakon OR thrilling foods' in Pushshift or Reddit search. Strong vegan community engagement."},
+        {icon:"📱",name:"TikTok — #veganbakon #plantbasedbacon",url:"https://www.tiktok.com",cadence:"w",note:"Fastest-growing channel for CPG discovery. Thrilling has 47 estimated mentions this period. Food content virality can drive sudden DTC spikes. Monitor via TikTok Creative Center."},
+        {icon:"💬",name:"Discord — Vegan/Plant-Based servers",url:"https://discord.com",cadence:"m",note:"Servers: VegHub, Vegan Community, PlantBasedFitness. More engaged than broad social but harder to automate. Manual review monthly."},
+        {icon:"▶️",name:"YouTube — vegan food review channels",url:"https://www.youtube.com",cadence:"m",note:"Search 'thrilling bakon review' and 'best vegan bacon'. Longer-form reviews drive purchase decisions. Key channels: Myles Footage, Pick Up Limes, Brand New Vegan."},
+        {icon:"📌",name:"Pinterest — vegan recipes, clean eating",url:"https://www.pinterest.com",cadence:"m",note:"High purchase-intent platform for food. Recipe pins mentioning Thrilling Bakon drive DTC referral. Track via Pinterest Analytics if brand account exists."},
+        {icon:"👥",name:"Facebook Groups — vegan/plant-based communities",url:"https://www.facebook.com",cadence:"m",note:"Key groups: Vegan Food Share (2M+), Plant Based Eating (500K+). Manual search monthly. Strong 35–55yo demographic, high DTC purchase intent."}
+      ]},
+      {title:"Assumptions",rows:[
+        {icon:"⚠️",name:"Mention count methodology",url:null,cadence:"s",note:"Mentions are estimated from manual searches and where available, platform analytics. 'Thrilling-specific' mentions may include misspellings (Thrilling Foods, ThrillingBakon). Not deduplicated across platforms."},
+        {icon:"⚠️",name:"Sentiment scoring",url:null,cadence:"s",note:"Score of null = no star-rating system on that platform. Trend (up/dn/stable) is based on week-over-week mention velocity. Full NLP sentiment analysis not yet implemented — add as pipeline matures."},
+        {icon:"⚠️",name:"Competitor sentiment gap",url:null,cadence:"s",note:"Currently only Thrilling sentiment is tracked at channel level. Competitor channel-level data to be added in v4 once baseline is established. Competitor total review counts tracked in the main table."}
+      ]}
+    ]
+  },
+  ins: {
+    sections:[
+      {title:"Market sizing",rows:[
+        {icon:"📊",name:"Plant-based bacon market report",url:"https://www.marketreportanalytics.com/reports/plant-based-bacon-259555",cadence:"m",note:"$500M estimated 2025 market size. 15% CAGR projected to 2033 (~$1.8B). Key players: Upton's, Tofurky, Sweet Earth, MorningStar, Lightlife."},
+        {icon:"📊",name:"Good Food Institute plant-based data",url:"https://gfi.org",cadence:"m",note:"GFI tracks US retail plant-based sales. Category peaked ~2021 and has seen moderation; however premium/clean-label segment showing resilience."}
+      ]},
+      {title:"Competitive intelligence basis",rows:[
+        {icon:"🔍",name:"All competitor data sources",url:null,cadence:"s",note:"Aggregated from brand websites, public IG profiles, retailer listings, press releases, and nutrition databases. Full source details in each theme's source tree."},
+        {icon:"🔍",name:"Thrilling data basis",url:"https://www.thrillingfoods.com",cadence:"w",note:"DTC pricing and availability from thrillingfoods.com. Nutrition from physical label scan Apr 2026. Distribution from LinkedIn bio (needs verification)."}
+      ]},
+      {title:"Assumptions",rows:[
+        {icon:"⚠️",name:"Upton's protein comparison",url:null,cadence:"s",note:"Upton's 15g listed per 2oz serving. If Thrilling serving is ~0.9oz (11g cooked), Upton's per-slice equivalent is ~8g — closer to Thrilling's 6g than the raw label suggests. Normalize serving sizes before messaging comparison."},
+        {icon:"⚠️",name:"Retail store count precision",url:null,cadence:"m",note:"All store counts except Lightlife (2019 press release) are estimates. ±30–50% error band should be assumed. SPINS/Nielsen data would provide precision."}
+      ]}
+    ]
+  }
+};
+
+/* ═══ STATE ═══ */
+let gran = 'week', snapIdx = 0;
+
+function snap() { return SNAPS[snapIdx]; }
+function nav(d) { snapIdx = Math.max(0, Math.min(SNAPS.length-1, snapIdx+d)); refresh(); }
+function setG(g, btn) { gran=g; document.querySelectorAll('.seg-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); refresh(); }
+
+function fmtN(n) { if(n>=1000000) return (n/1e6).toFixed(1)+'M'; if(n>=1000) return (n/1000).toFixed(0)+'K'; return ''+n; }
+function deltaB(metric, idx) {
+  if(SNAPS.length<2||snapIdx===0) return '<span class="delta fl">—</span>';
+  const cur=SNAPS[snapIdx][metric][idx], prv=SNAPS[snapIdx-1][metric][idx];
+  if(!prv) return '<span class="delta fl">—</span>';
+  const p=((cur-prv)/prv*100).toFixed(1);
+  const cls=p>0?'up':p<0?'dn':'fl', arr=p>0?'▲':p<0?'▼':'→';
+  return `<span class="delta ${cls}">${arr} ${Math.abs(p)}%</span>`;
+}
+function spk(vals, color, w, h) {
+  if(!vals||vals.length<2) return `<svg width="${w}" height="${h}"><text x="${w/2}" y="${h/2+3}" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.15)">—</text></svg>`;
+  const mn=Math.min(...vals),mx=Math.max(...vals),rng=mx-mn||1;
+  const pts=vals.map((v,i)=>`${i/(vals.length-1)*w},${h-(v-mn)/rng*(h-4)-2}`).join(' ');
+  const lx=w, ly=h-(vals[vals.length-1]-mn)/rng*(h-4)-2;
+  return `<svg width="${w}" height="${h}"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${lx}" cy="${ly}" r="2" fill="${color}"/></svg>`;
+}
+function snapVals(metric) { return SNAPS.map(s=>s[metric]); }
+
+function periodLabel() {
+  const s=snap(); if(!s) return '—';
+  if(gran==='week'){const d=new Date(s.date),e=new Date(d);e.setDate(d.getDate()+6);return `${s.label} – ${e.toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;}
+  if(gran==='month'){return new Date(s.date).toLocaleDateString('en-US',{month:'long',year:'numeric'});}
+  return ''+new Date(s.date).getFullYear();
+}
+
+/* ═══ SOURCE TREE BUILDER ═══ */
+function buildSourceTree(key, domId) {
+  const def = SOURCES[key]; if(!def) return;
+  const el = document.getElementById(domId); if(!el) return;
+  const totalRows = def.sections.reduce((a,s)=>a+s.rows.length,0);
+  el.innerHTML = `
+  <div class="src-tree">
+    <button class="src-toggle" onclick="toggleSrc(this)">
+      <span class="arr">▶</span>
+      Source data &amp; assumptions
+      <span class="src-meta">${def.sections.length} sections · ${totalRows} sources</span>
+    </button>
+    <div class="src-body">
+      ${def.sections.map(sec=>`
+        <div class="src-section">
+          <div class="src-section-hd">${sec.title}</div>
+          ${sec.rows.map(r=>`
+            <div class="src-row">
+              <span class="src-icon">${r.icon}</span>
+              <div class="src-info">
+                <span class="src-name">${r.name}</span>
+                ${r.url?`<span class="src-url"><a href="${r.url}" target="_blank">${r.url.replace('https://','').split('/')[0]}</a></span>`:''}
+                <span class="src-note">${r.note}</span>
+              </div>
+              <span class="src-cadence ${r.cadence}">${r.cadence==='w'?'Weekly':r.cadence==='m'?'Monthly':'Static'}</span>
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function toggleSrc(btn) {
+  btn.classList.toggle('open');
+  btn.nextElementSibling.classList.toggle('open');
+}
+
+/* ═══ RENDER ═══ */
+function renderIngredients() {
+  const rows = COMPS.map((nm,i)=>{
+    const f=i===0;
+    const maxP=Math.max(...STATIC.protein);
+    const pW=(STATIC.protein[i]/maxP*100).toFixed(0);
+    const pCol=STATIC.protein[i]>=10?'var(--gr)':STATIC.protein[i]>=5?'var(--ye)':'var(--rd)';
+    const sPill=STATIC.sodium[i]<=150?'g':STATIC.sodium[i]<=280?'y':'r';
+    const iPill=STATIC.ingr[i]<=10?'g':STATIC.ingr[i]<=15?'y':'r';
+    return `<tr${f?' class="hl"':''}>
+      <td><div class="pn"><span class="n">${nm}</span><span class="sub${f?' f':''}">${f?'▶ Focus':i===7?'Benchmark':'Plant-based'}</span></div></td>
+      <td><span class="pill ${STATIC.calories[i]<=50?'g':STATIC.calories[i]<=80?'y':'y'}">${STATIC.calories[i]}</span></td>
+      <td><div class="br"><div class="bt"><div class="bf" style="width:${pW}%;background:${pCol}"></div></div><span class="sv" style="color:${pCol}">${STATIC.protein[i]}g</span></div></td>
+      <td><span class="pill ${STATIC.satFat[i]<=1?'g':STATIC.satFat[i]<=1.5?'y':'r'}">${STATIC.satFat[i]}g</span></td>
+      <td><span class="pill ${sPill}">${STATIC.sodium[i]}mg${f?' ✓':''}</span></td>
+      <td><span class="pill ${STATIC.vegan[i]?'g':'r'}">${STATIC.vegan[i]?'✓ Vegan':'✗ No'}</span></td>
+      <td><span class="pill ${STATIC.gf[i]?'g':'r'}">${STATIC.gf[i]?'✓':'✗'}</span></td>
+      <td><span class="pill ${STATIC.nongmo[i]?'g':'y'}">${STATIC.nongmo[i]?'✓':'Partial'}</span></td>
+      <td><span class="pill ${iPill}">${STATIC.ingr[i]}${STATIC.ingr[i]<=10?' ★':''}</span></td>
+      <td><span class="pill ${STATIC.artif[i]?'r':'g'}">${STATIC.artif[i]?'Yes':'None'}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('ing-tb').innerHTML = rows;
+  buildSourceTree('ing','ing-src');
+}
+
+function renderMedia() {
+  const s=snap();
+  const rows = COMPS.map((nm,i)=>{
+    const f=i===0;
+    const ig=s.igFollowers[i];
+    const igC=ig>=70000?'g':ig>=30000?'y':'r';
+    const igCol=igC==='g'?'#3ecf8e':igC==='y'?'#f5c53a':'#e34a2c';
+    const sv=spk(SNAPS.map(x=>x.igFollowers[i]),igCol,55,18);
+    const db=deltaB('igFollowers',i);
+    return `<tr${f?' class="hl"':''}>
+      <td><div class="pn"><span class="n">${nm}</span><span class="sub${f?' f':''}">${STATIC.igHandle[i]}</span></div></td>
+      <td><div class="spk">${sv}<span class="sv">${fmtN(ig)}</span>${db}</div></td>
+      <td><span class="pill ${s.newPress[i]>0?'g':'y'}">${s.newPress[i]>0?s.newPress[i]+' this wk':'None'}</span></td>
+      <td><span class="pill ${['g','y','y','r','g','y','r','g'][i]}">${STATIC.pressRank[i]}</span></td>
+      <td><span class="pill ${STATIC.socialSignal[i].includes('DORMANT')?'r':['g','g','y','r','g','y','r','g'][i]}">${STATIC.socialSignal[i]}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('med-tb').innerHTML = rows;
+  buildSourceTree('med','med-src');
+}
+
+function renderCPG() {
+  const s=snap();
+  const regCls=r=>r==='Str'||r==='All'?'on':r==='Mod'||r==='Sel'?'pa':'off';
+  const rows = COMPS.map((nm,i)=>{
+    const f=i===0;
+    const d=s.retailDoors[i];
+    const dC=d>=5000?'g':d>=1000?'y':'r';
+    const dCol=dC==='g'?'#3ecf8e':dC==='y'?'#f5c53a':'#e34a2c';
+    const sv=spk(SNAPS.map(x=>x.retailDoors[i]),dCol,55,18);
+    const db=deltaB('retailDoors',i);
+    const rts=STATIC.retailers[i].slice(0,4).map(r=>`<span class="chip on">${r}</span>`).join('');
+    const regs=STATIC.regions[i].map((r,j)=>`<span class="chip ${regCls(r)}">${['W','MW','S','NE'][j]}:${r}</span>`).join('');
+    return `<tr${f?' class="hl"':''}>
+      <td><div class="pn"><span class="n">${nm}</span><span class="sub${f?' f':''}">${STATIC.channels[i]}</span></div></td>
+      <td><div class="spk">${sv}<span class="sv">${fmtN(d)}</span>${db}</div></td>
+      <td><div class="chips">${regs}</div></td>
+      <td><div class="chips">${rts}</div></td>
+      <td><span class="pill ${STATIC.foodsvc[i]?'y':'r'}">${STATIC.foodsvc[i]?'Yes':'No'}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('cpg-tb').innerHTML = rows;
+  buildSourceTree('cpg','cpg-src');
+}
+
+function renderPricing() {
+  const s=snap();
+  const rows = COMPS.map((nm,i)=>{
+    const f=i===0;
+    const p=s.pricePerOz[i];
+    const pC=p<=1.00?'g':p<=1.30?'y':'r';
+    const pCol=pC==='g'?'#3ecf8e':pC==='y'?'#f5c53a':'#e34a2c';
+    const sv=spk(SNAPS.map(x=>x.pricePerOz[i]),pCol,55,18);
+    const db=deltaB('pricePerOz',i);
+    const vsT=i===0?'—':((1-p/s.pricePerOz[0])*100).toFixed(0)+'% cheaper';
+    const pgC=['r','y','y','g','g','g','y','y'][i];
+    return `<tr${f?' class="hl"':''}>
+      <td><div class="pn"><span class="n">${nm}</span><span class="sub${f?' f':''}">${STATIC.pkgSize[i]}</span></div></td>
+      <td>${STATIC.listPrice[i]}</td>
+      <td><div class="spk">${sv}<span class="sv">$${p}/oz</span>${db}</div></td>
+      <td><span class="pill ${pgC}">${['~$0.31/g','~$0.20/g','~$0.24/g','~$0.11/g★','~$0.06/g★★','~$0.07/g★★','~$0.23/g','~$0.19/g'][i]}</span></td>
+      <td>${i===0?'<span class="pill b">Baseline</span>':`<span class="pill g">${vsT}</span>`}</td>
+      <td><span class="pill ${STATIC.promo[i]?'g':'y'}">${STATIC.promo[i]?'Active promo':'None noted'}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('pri-tb').innerHTML = rows;
+  buildSourceTree('pri','pri-src');
+}
+
+function renderVelocity() {
+  const s=snap();
+  const promoTxt=['None','None','Yes – Kroger','Select WFM','None','None','None','Weekly circular'];
+  const placeTxt=STATIC.shelf;
+  const rows = COMPS.map((nm,i)=>{
+    const f=i===0;
+    const pct=s.inStockPct[i];
+    const pC=pct>=95?'g':pct>=80?'y':'r';
+    const pCol=pC==='g'?'#3ecf8e':pC==='y'?'#f5c53a':'#e34a2c';
+    const sv=spk(SNAPS.map(x=>x.inStockPct[i]),pCol,55,18);
+    const db=deltaB('inStockPct',i);
+    return `<tr${f?' class="hl"':''}>
+      <td><div class="pn"><span class="n">${nm}</span><span class="sub${f?' f':''}">${f?'▶ Focus':''}</span></div></td>
+      <td><div class="spk">${sv}<span class="sv">${pct}%</span>${db}</div></td>
+      <td><span class="pill ${promoTxt[i]==='None'?'y':'g'}">${promoTxt[i]}</span></td>
+      <td><span class="pill ${s.newPress[i]>0?'g':'y'}">None noted</span></td>
+      <td><span class="pill b">${placeTxt[i]}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('vel-tb').innerHTML = rows;
+  buildSourceTree('vel','vel-src');
+}
+
+function renderSentiment() {
+  const s=snap();
+  // Main competitor table
+  const rows = COMPS.map((nm,i)=>{
+    const f=i===0;
+    const sc=s.reviewScore[i];
+    const cnt=s.reviewCount[i];
+    const scC=sc>=4.2?'g':sc>=3.7?'y':'r';
+    const scCol=scC==='g'?'#3ecf8e':'#f5c53a';
+    const sv=spk(SNAPS.map(x=>x.reviewScore[i]),scCol,55,18);
+    const db=deltaB('reviewScore',i);
+    const sv2=spk(SNAPS.map(x=>x.reviewCount[i]),'#5b9cf6',55,18);
+    const db2=deltaB('reviewCount',i);
+    return `<tr${f?' class="hl"':''}>
+      <td><div class="pn"><span class="n">${nm}</span><span class="sub${f?' f':''}">${f?'▶ Focus':''}</span></div></td>
+      <td><div class="spk">${sv}<span class="sv">${sc}</span>${db}</div></td>
+      <td><div class="spk">${sv2}<span class="sv">${fmtN(cnt)}</span>${db2}</div></td>
+      <td><span class="pill ${s.newPress[i]>0?'g':'y'}">${s.newPress[i]>0?s.newPress[i]+' this wk':'None'}</span></td>
+      <td><span class="pill ${['g','y','y','r','y','g','r','g'][i]}">${['Active vegan forums','Occasional','Moderate','Low (dormant brand)','Niche vegan','Engaged vegan','Minimal US','High mainstream'][i]}</span></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('sen-tb').innerHTML = rows;
+
+  // Channel grid (Thrilling focus)
+  const sen = s.sentiment;
+  const channels = [
+    {key:'amazon',    icon:'⭐', name:'Amazon',          col:'#f5c53a'},
+    {key:'retailer',  icon:'🛒', name:'Retailer',        col:'#3ecf8e'},
+    {key:'reddit',    icon:'💬', name:'Reddit',          col:'#ff6314'},
+    {key:'tiktok',    icon:'📱', name:'TikTok',          col:'#5b9cf6'},
+    {key:'discord',   icon:'💻', name:'Discord',         col:'#7289da'},
+    {key:'youtube',   icon:'▶️', name:'YouTube',         col:'#e34a2c'},
+    {key:'pinterest', icon:'📌', name:'Pinterest',       col:'#e60023'},
+    {key:'facebook',  icon:'👥', name:'Facebook Groups', col:'#4267b2'},
+    {key:'google',    icon:'🔍', name:'Google Reviews',  col:'#3ecf8e'},
+  ];
+  const cards = channels.map(ch=>{
+    const d=sen[ch.key];
+    const hasScore=d.score!==null;
+    const trendCls=d.trend==='up'?'up':d.trend==='dn'?'dn':'fl';
+    const trendArr=d.trend==='up'?'▲':d.trend==='dn'?'▼':'→';
+    return `<div class="ch-card">
+      <div class="ch-hd">
+        <span class="ch-icon">${ch.icon}</span>
+        <span class="ch-name">${ch.name}</span>
+        <span class="ch-badge"><span class="delta ${trendCls}">${trendArr}</span></span>
+      </div>
+      <div class="ch-metric" style="color:${ch.col}">${hasScore?d.score+'★':d.mentions+' mentions'}</div>
+      <div class="ch-sub">${hasScore?d.count+' reviews · '+d.mentions+' mentions':d.count?d.count+' posts':'Estimated mentions'}</div>
+      <div class="ch-delta">Trend: <span class="delta ${trendCls}">${trendArr} ${d.trend}</span></div>
+    </div>`;
+  }).join('');
+  document.getElementById('sen-channels').innerHTML = cards;
+  buildSourceTree('sen','sen-src');
+}
+
+function renderInsights() {
+  const s=snap();
+  const cards=[
+    {lbl:'Ingredient Rank',val:'#1',unit:"Tied w/ Upton's · 8 ingr.",tr:'▲ Own this story',tc:'var(--gr)'},
+    {lbl:'IG Follower Gap',val:'8×',unit:'vs Tofurky (104K)',tr:'▼ Social deficit',tc:'var(--rd)'},
+    {lbl:'Retail Store Gap',val:'60×',unit:'vs Lightlife (12K)',tr:'▼ #1 strategic risk',tc:'var(--rd)'},
+    {lbl:'Price Premium',val:'+88%',unit:'vs avg retail plant-based',tr:'▼ Needs justification',tc:'var(--rd)'},
+    {lbl:'Review Ranking',val:'#1',unit:'Tasting Table + Chowhound',tr:'▲ Conversion asset',tc:'var(--gr)'},
+    {lbl:'Sodium (label ✓)',val:'170mg',unit:'vs Tofurky 370mg',tr:'✓ Verified Apr 2026',tc:'var(--ye)'},
+    {lbl:'Market Size',val:'$500M',unit:'Plant-based bacon 2025',tr:'▲ 15% CAGR → 2033',tc:'var(--gr)'},
+    {lbl:"Closest Threat",val:"Upton's",unit:'8 ingr · $1.10/oz · 3K doors',tr:'▼ Watch distribution',tc:'var(--or)'},
+  ];
+  document.getElementById('ins-sc').innerHTML = cards.map(c=>
+    `<div class="sc hl"><span class="lbl">${c.lbl}</span><span class="val" style="color:${c.tc}">${c.val}</span><span class="unit">${c.unit}</span><span class="tr" style="color:${c.tc}">${c.tr}</span></div>`
+  ).join('');
+  const insights=[
+    {i:'🥇',c:'rgba(62,207,142,.12)',t:'Clean Label + Taste #1 = Dual Moat',p:"Thrilling and Upton's are the only brands with ~8 clean ingredients. But only Thrilling holds #1 editorial rankings. 'Cleanest ingredients + best taste' is defensible and has no direct competitor — own both pillars."},
+    {i:'⚠️',c:'rgba(227,74,44,.12)',t:"Upton's Is the Most Direct Threat",p:"8 ingredients, 15g protein, $1.10/oz, 3,000+ doors. Hits nearly every Thrilling advantage at lower price and wider reach. Thrilling's moats: DTC community, superior taste rankings, and no egg whites (fully vegan)."},
+    {i:'🏪',c:'rgba(245,197,58,.12)',t:'Next Milestone: 1,000 Retail Doors',p:'WFM (522) + Sprouts (431) = 953 premium natural stores. Landing 60% in Y1 provides national credibility and volume to justify a competitive retail price. This is the distribution milestone to model revenue around.'},
+    {i:'📣',c:'rgba(91,156,246,.12)',t:'TikTok + Pinterest Are the Highest-Leverage Channels',p:'47 TikTok mentions and 19 Pinterest pins this week with zero paid spend. Both channels drive DTC purchase intent for food brands. Allocating $5–10K/month toward TikTok creator seeding could compound the earned momentum already building.'},
+    {i:'💬',c:'rgba(62,207,142,.12)',t:'Sweet Earth Dormant = Shelf Space Opportunity',p:"Sweet Earth's 97K ghost account and Nestlé's apparent brand deprioritization means their WFM and Target facings may be vulnerable. Thrilling's retail pitch should specifically target the slots Sweet Earth currently holds in natural channel."},
+    {i:'🔬',c:'rgba(62,207,142,.12)',t:'Sodium Now a Green Flag',p:'170mg confirmed from physical label scan. Competitive with Lightlife (140mg) and Sweet Earth (120mg). Significantly better than Tofurky (370mg) and Upton\'s (400mg). Lean into this in health-conscious messaging.'},
+  ];
+  document.getElementById('ins-ic').innerHTML = insights.map(c=>
+    `<div class="ic"><div class="ich"><div class="ici" style="background:${c.c}">${c.i}</div><h4>${c.t}</h4></div><p>${c.p}</p></div>`
+  ).join('');
+  buildSourceTree('ins','ins-src');
+}
+
+/* ═══ CANVAS CHART ═══ */
+function drawChart(id, vals, color) {
+  const canvas=document.getElementById(id); if(!canvas) return;
+  const W=canvas.offsetWidth||400, H=140;
+  canvas.width=W; canvas.height=H;
+  if(!vals||vals.length<2){
+    const ctx=canvas.getContext('2d');
+    ctx.fillStyle='rgba(255,255,255,.15)';ctx.font='11px DM Mono,monospace';ctx.textAlign='center';
+    ctx.fillText('Add weekly snapshots to populate trend',W/2,H/2);return;
+  }
+  const ctx=canvas.getContext('2d');
+  const mn=Math.min(...vals)*.97,mx=Math.max(...vals)*1.03;
+  const pad={l:42,r:14,t:10,b:26};
+  const gw=W-pad.l-pad.r,gh=H-pad.t-pad.b;
+  ctx.strokeStyle='rgba(255,255,255,.04)';ctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=pad.t+gh-(i/4)*gh;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+gw,y);ctx.stroke();}
+  ctx.fillStyle='rgba(255,255,255,.2)';ctx.font='10px DM Mono,monospace';ctx.textAlign='right';
+  for(let i=0;i<=4;i++){const v=mn+(i/4)*(mx-mn);const y=pad.t+gh-(i/4)*gh;ctx.fillText(v>=1000?(v/1000).toFixed(0)+'k':v.toFixed(1),pad.l-3,y+3);}
+  ctx.textAlign='center';
+  SNAPS.forEach((s,i)=>{
+    const x=pad.l+(i/Math.max(1,SNAPS.length-1))*gw;
+    const d=new Date(s.date);
+    ctx.fillStyle='rgba(255,255,255,.2)';ctx.fillText(d.toLocaleDateString('en-US',{month:'short',day:'numeric'}),x,H-6);
+  });
+  const r=(c)=>{const h=c.replace('#','');return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];};
+  ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=2;ctx.lineJoin='round';ctx.lineCap='round';
+  vals.forEach((v,i)=>{const x=pad.l+(i/Math.max(1,vals.length-1))*gw,y=pad.t+gh-((v-mn)/(mx-mn))*gh;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.stroke();
+  ctx.beginPath();
+  vals.forEach((v,i)=>{const x=pad.l+(i/Math.max(1,vals.length-1))*gw,y=pad.t+gh-((v-mn)/(mx-mn))*gh;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+  ctx.lineTo(pad.l+gw,pad.t+gh);ctx.lineTo(pad.l,pad.t+gh);ctx.closePath();
+  try{const [rr,g,b]=r(color);ctx.fillStyle=`rgba(${rr},${g},${b},0.07)`;}catch{ctx.fillStyle='rgba(255,255,255,.04)';}
+  ctx.fill();
+  vals.forEach((v,i)=>{
+    const x=pad.l+(i/Math.max(1,vals.length-1))*gw,y=pad.t+gh-((v-mn)/(mx-mn))*gh;
+    ctx.beginPath();ctx.arc(x,y,i===snapIdx?4:2.5,0,Math.PI*2);
+    ctx.fillStyle=i===snapIdx?color:'rgba(255,255,255,.3)';ctx.fill();
+  });
+}
+
+function renderCharts() {
+  drawChart('chart-ig',   SNAPS.map(s=>s.igFollowers[0]),  '#5b9cf6');
+  drawChart('chart-price',SNAPS.map(s=>s.pricePerOz[0]),   '#f5c53a');
+  drawChart('chart-score',SNAPS.map(s=>s.reviewScore[0]),  '#3ecf8e');
+  drawChart('chart-doors',SNAPS.map(s=>s.retailDoors[0]),  '#e34a2c');
+}
+
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ttab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('p-'+id).classList.add('active');
+  event.target.classList.add('active');
+  setTimeout(()=>{renderCharts();animateBars();},30);
+}
+
+function animateBars() {
+  document.querySelectorAll('.bf,.hbf').forEach(b=>{
+    const w=b.style.width;b.style.width='0';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{b.style.width=w;}));
+  });
+}
+
+function refresh() {
+  const s=snap();
+  document.getElementById('plbl').textContent=periodLabel();
+  document.getElementById('cwl').textContent='Week of '+(s?s.label:'—');
+  document.getElementById('scnt').textContent=SNAPS.length+' snapshot'+(SNAPS.length!==1?'s':'');
+  document.getElementById('snote').textContent=`Showing ${snapIdx+1} of ${SNAPS.length} snapshots · add weekly via pipeline`;
+  renderIngredients();renderMedia();renderCPG();renderPricing();renderVelocity();renderSentiment();renderInsights();
+  setTimeout(()=>{renderCharts();animateBars();},30);
+}
+
+window.addEventListener('DOMContentLoaded',()=>{ refresh(); });
+window.addEventListener('resize',()=>{ renderCharts(); });
+</script>
+
+<!-- ══ PANEL: INGREDIENTS ══ -->
+<div class="panel active" id="p-ing">
+  <div class="sec">Product &amp; Ingredients Matrix <span class="badge s">Static — update on label change</span></div>
+  <div class="tw"><table>
+    <thead><tr><th style="min-width:148px">Product</th><th>Cal</th><th>Protein/slice</th><th>Sat.Fat</th><th>Sodium</th><th>Vegan</th><th>GF</th><th>Non-GMO</th><th>Ingr.Count</th><th>Artificial</th></tr></thead>
+    <tbody id="ing-tb"></tbody>
+  </table></div>
+  <div class="note gn"><strong>✓ Label confirmed Apr 2026:</strong> Sodium 170mg · Calories 90 · Protein 6g · Sat.Fat 1.5g · Cholesterol 0mg — physical label scan.</div>
+  <div id="ing-src"></div>
+</div>
+
+<!-- ══ PANEL: MEDIA INDEX ══ -->
+<div class="panel" id="p-med">
+  <div class="sec">Media Index <span class="badge w">Weekly refresh</span></div>
+  <div class="tw"><table>
+    <thead><tr><th style="min-width:148px">Brand</th><th>IG Followers + Trend</th><th>New Press</th><th>Press Ranking</th><th>Social Signal</th></tr></thead>
+    <tbody id="med-tb"></tbody>
+  </table></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px">
+    <div class="tl-chart"><h4>IG Followers — Thrilling <span class="badge w">Weekly</span></h4><canvas id="chart-ig" class="tl"></canvas></div>
+    <div class="tl-chart"><h4>Review Score — Thrilling <span class="badge w">Weekly</span></h4><canvas id="chart-score" class="tl"></canvas></div>
+  </div>
+  <div id="med-src"></div>
+</div>
+
+<!-- ══ PANEL: CPG / DISTRIBUTION ══ -->
+<div class="panel" id="p-cpg">
+  <div class="sec">CPG &amp; Distribution <span class="badge m">Monthly cadence</span></div>
+  <div class="tw"><table>
+    <thead><tr><th style="min-width:148px">Brand</th><th>Est.Doors + Trend</th><th>Regional Coverage (W/MW/S/NE)</th><th>Key Retailers</th><th>Foodservice</th></tr></thead>
+    <tbody id="cpg-tb"></tbody>
+  </table></div>
+  <div class="tl-chart" style="margin-top:16px;max-width:520px"><h4>Retail Doors — Thrilling <span class="badge m">Monthly</span></h4><canvas id="chart-doors" class="tl"></canvas></div>
+  <div class="note rn"><strong>🔴 Distribution gap:</strong> Thrilling ~200 vs Lightlife 12,000+ = 60× gap. Priority target: West/Southwest natural channel (WFM + Sprouts = ~953 premium stores). Beachhead: CA, NV, AZ, WA.</div>
+  <div id="cpg-src"></div>
+</div>
+
+<!-- ══ PANEL: PRICING ══ -->
+<div class="panel" id="p-pri">
+  <div class="sec">Pricing &amp; Value <span class="badge w">Weekly refresh</span></div>
+  <div class="tw"><table>
+    <thead><tr><th style="min-width:148px">Brand</th><th>Package</th><th>Price/oz + Trend</th><th>$/g Protein</th><th>vs. Thrilling</th><th>Promo</th></tr></thead>
+    <tbody id="pri-tb"></tbody>
+  </table></div>
+  <div class="tl-chart" style="margin-top:16px;max-width:520px"><h4>Price/oz — Thrilling <span class="badge w">Weekly</span></h4><canvas id="chart-price" class="tl"></canvas></div>
+  <div class="note rn"><strong>🔴 Price flag:</strong> $1.88/oz DTC = 88% above nearest plant-based competitor. Retail entry target: $0.90–1.20/oz in 5–6oz pack (~$5.99–7.99 shelf price).</div>
+  <div id="pri-src"></div>
+</div>
+
+<!-- ══ PANEL: RETAIL VELOCITY ══ -->
+<div class="panel" id="p-vel">
+  <div class="sec">Retail Velocity &amp; Availability <span class="badge w">Weekly refresh</span></div>
+  <div class="tw"><table>
+    <thead><tr><th style="min-width:148px">Brand</th><th>In-Stock % + Trend</th><th>Promo Activity</th><th>New Retailer Listings</th><th>Shelf Placement</th></tr></thead>
+    <tbody id="vel-tb"></tbody>
+  </table></div>
+  <div class="icg">
+    <div class="ic"><div class="ich"><div class="ici" style="background:rgba(91,156,246,.12)">📊</div><h4>What this tracks week-over-week</h4></div><p>In-stock % proxies availability from Instacart/Google Shopping product pages. Promo flags active sale signals or circular ads. New listings = first appearance on a retailer's product page. Key watch: Upton's gaining WFM/Sprouts doors that overlap Thrilling's target territory.</p></div>
+    <div class="ic"><div class="ich"><div class="ici" style="background:rgba(62,207,142,.12)">🏪</div><h4>Sweet Earth vacancy opportunity</h4></div><p>Sweet Earth's dormant social presence and Nestlé deprioritization may mean vulnerable shelf facings at WFM and Target. Thrilling's retail pitch should specifically target slots Sweet Earth currently holds in the natural channel — same price tier, better engagement story.</p></div>
+  </div>
+  <div id="vel-src"></div>
+</div>
+
+<!-- ══ PANEL: CONSUMER SENTIMENT ══ -->
+<div class="panel" id="p-sen">
+  <div class="sec">Consumer Sentiment — Thrilling Bakon™ Focus <span class="badge w">Weekly refresh</span></div>
+  <p style="font-family:'DM Mono',monospace;font-size:11px;color:var(--mu);margin-bottom:14px">Channel-level breakdown for Thrilling · Competitor aggregate scores in table below</p>
+  <div id="sen-channels" class="ch-grid"></div>
+  <div class="sec" style="margin-top:4px">Competitor Sentiment Overview <span class="badge w">Weekly</span></div>
+  <div class="tw"><table>
+    <thead><tr><th style="min-width:148px">Brand</th><th>Review Score + Trend</th><th>Review Count + Trend</th><th>New Press</th><th>Community Signal</th></tr></thead>
+    <tbody id="sen-tb"></tbody>
+  </table></div>
+  <div class="icg">
+    <div class="ic"><div class="ich"><div class="ici" style="background:rgba(245,197,58,.12)">📱</div><h4>TikTok + Pinterest = Highest Leverage Now</h4></div><p>47 TikTok mentions and 19 Pinterest pins this week with zero paid spend. Both are high purchase-intent channels for food CPG. Seeding 3–5 TikTok creators in the 50K–200K vegan food tier for $5–10K/month could compound the existing organic momentum significantly.</p></div>
+    <div class="ic"><div class="ich"><div class="ici" style="background:rgba(62,207,142,.12)">👥</div><h4>Reddit + Facebook Groups = Trust Building</h4></div><p>22 Reddit mentions and 31 Facebook Group mentions this week — organic, unpaid, and in high-credibility environments. These communities (r/vegan, Plant Based Eating group) are where long-form product comparisons happen. Monitor for any negative sentiment before it compounds.</p></div>
+    <div class="ic"><div class="ich"><div class="ici" style="background:rgba(91,156,246,.12)">▶️</div><h4>YouTube Reviews Drive Long-Tail Discovery</h4></div><p>6 YouTube mentions detected. Longer-form vegan food review channels (10K–500K subscribers) drive purchase decisions for 35–55yo demographic — exactly the DTC buyer profile. Prioritize seeding product samples to 2–3 mid-tier channels before pursuing large creators.</p></div>
+    <div class="ic"><div class="ich"><div class="ici" style="background:rgba(227,74,44,.12)">💬</div><h4>Discord: Low Volume, High Signal Quality</h4></div><p>11 Discord mentions across VegHub and PlantBasedFitness servers. Small volume but highly engaged, high-purchase-intent community. Monitor monthly. A single positive shoutout in a large vegan Discord can drive 50–100 DTC orders within 48 hours.</p></div>
+  </div>
+  <div id="sen-src"></div>
+</div>
+
+<!-- ══ PANEL: INSIGHTS ══ -->
+<div class="panel" id="p-ins">
+  <div class="sec">Strategic Insights &amp; Action Flags <span class="badge w">Cross-theme synthesis</span></div>
+  <div class="scg" id="ins-sc"></div>
+  <div class="icg" id="ins-ic"></div>
+  <div class="note" style="margin-top:18px"><strong>📋 Week 1 Action Items:</strong> (1) ✓ Sodium confirmed 170mg from label. (2) Verify 200+ retail/foodservice outlet claim — get a store list. (3) Pull Thrilling's actual IG engagement rate. (4) Check if Upton's is in the same retail accounts as Thrilling. (5) Seed 2–3 TikTok vegan food creators. (6) Build Instacart availability scraper for weekly in-stock signal.</div>
+  <div id="ins-src"></div>
+</div>
+
+<!-- PIPELINE CONFIG MODAL -->
+<div class="modal-bg" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <h3>Weekly Data Pipeline</h3>
+    <p>The dashboard reads from the <code>SNAPS</code> array at the top of the script. To update weekly, append a new snapshot object every Monday. Here's the structure:</p>
+    <pre>{
+  date: "2026-04-21",          // ISO date string
+  label: "Apr 21, 2026",       // Human-readable
+  igFollowers: [13000,...],    // 8 values, one per competitor
+  pricePerOz:  [1.88,...],     // Current price/oz
+  reviewScore: [4.4,...],      // Avg review score
+  reviewCount: [120,...],      // Total review count
+  inStockPct:  [100,...],      // In-stock % (0–100)
+  newPress:    [1,...],        // Press mentions this week
+  retailDoors: [200,...],      // Est. retail doors
+  sentiment: {
+    amazon:   {score:4.4, count:120, mentions:14, trend:"up"},
+    retailer: {score:4.5, count:38,  mentions:8,  trend:"stable"},
+    reddit:   {score:null,count:null,mentions:22, trend:"up"},
+    tiktok:   {score:null,count:null,mentions:47, trend:"up"},
+    discord:  {score:null,count:null,mentions:11, trend:"stable"},
+    youtube:  {score:null,count:null,mentions:6,  trend:"stable"},
+    pinterest:{score:null,count:null,mentions:19, trend:"up"},
+    facebook: {score:null,count:null,mentions:31, trend:"stable"},
+    google:   {score:4.2, count:14,  mentions:14, trend:"stable"}
+  }
+}</pre>
+    <h4>Automation Candidates</h4>
+    <p><strong>Weekly (script):</strong> IG followers via public profile scrape · Retailer prices via Google Shopping or Instacart API · Review counts via Amazon product ASIN · TikTok/Reddit mention counts via keyword search APIs</p>
+    <p><strong>Monthly (manual):</strong> Retail door estimates · Regional distribution · New press/editorial rankings · Discord + Facebook group review</p>
+    <p><strong>Static (on change):</strong> Nutrition label data · Ingredients · Package sizes</p>
+    <h4>Recommended Stack</h4>
+    <p>Python scraper → JSON file → replace SNAPS array in this file · Or connect to a Supabase/Airtable backend and load via fetch() for a fully automated pipeline.</p>
+    <button class="modal-close" onclick="document.querySelector('.modal-bg').classList.remove('open')">Close</button>
+  </div>
+</div>
+
+</body>
+</html>
